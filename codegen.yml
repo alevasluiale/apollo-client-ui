@@ -1,0 +1,15 @@
+overwrite: true
+
+generates:
+  src/generated/graphql-types.ts:
+    documents: src/**/*.graphql
+    schema: ../apollo-server-to-rest-api/src/**/*.graphql
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
