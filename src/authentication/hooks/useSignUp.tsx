@@ -5,25 +5,27 @@ import { useCallback } from "react";
 const client = getClient();
 
 export const useSignUp = () => {
-  const [signUp] = useSignUpMutation({
+  const [signUpMutation, { data, error, loading }] = useSignUpMutation({
     client,
   });
 
   const doSignUp = useCallback(
-    async (input: SignUpInput) => {
-      console.log(input);
-      try {
-        return await signUp({
-          variables: {
-            input,
-          },
+    (input: SignUpInput) => {
+      signUpMutation({
+        variables: {
+          input,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          return response;
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      } catch (err) {
-        console.log(err);
-      }
     },
-    [signUp]
+    [signUpMutation]
   );
 
-  return { doSignUp };
+  return { doSignUp, data, error, loading };
 };

@@ -1,13 +1,8 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  gql,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 export const getClient = (): ApolloClient<any> => {
   return new ApolloClient({
-    uri: process.env.BFF_URL,
+    uri: "http://localhost:4000",
     cache: new InMemoryCache(),
   });
 };
