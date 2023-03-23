@@ -1,21 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 // import FacebookLogin from 'react-facebook-login';
 import * as Yup from "yup";
-import { Input } from "antd";
+import { Input, message } from "antd";
 import { SignUpInput } from "../../generated/graphql-types";
+import { useSignUp } from "../hooks/useSignUp";
 
-interface RegisterProps {
-  onRegister: (input: SignUpInput) => void;
-  onFacebookAuth: (
-    username: string,
-    email: string,
-    photoUrl: string,
-    accessToken: string
-  ) => void;
-}
+// interface RegisterProps {
+//   onRegister: (input: SignUpInput) => void;
+//   onFacebookAuth: (
+//     username: string,
+//     email: string,
+//     photoUrl: string,
+//     accessToken: string
+//   ) => void;
+// }
 
-function Register({ onRegister, onFacebookAuth }: RegisterProps) {
+function Register() {
+  const { doSignUp, data, error, loading } = useSignUp();
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
+
   return (
     <div className="col-md-4 mx-auto align-items-center">
       <Formik
@@ -31,8 +42,10 @@ function Register({ onRegister, onFacebookAuth }: RegisterProps) {
             .email("Has to be a valid email.")
             .required("Required"),
         })}
-        onSubmit={(values) => {
-          onRegister(values);
+        onSubmit={(values, { resetForm }) => {
+          doSignUp(values);
+          message.loading("Registration was submitted", 2);
+          resetForm();
         }}
       >
         {(props) => (
