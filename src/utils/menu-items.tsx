@@ -20,8 +20,14 @@ function getItem(
   } as MenuItem;
 }
 
-export const items: MenuItem[] = [
-  getItem("Home", "/", <HomeOutlined />),
-  getItem("Sign up", "/sign-up", <VideoCameraOutlined />),
-  getItem("Log in", "/sign-in", <VideoCameraOutlined />),
-];
+export const items = function (userLoggedIn: boolean): MenuItem[] {
+  return [
+    getItem("Home", "/", <HomeOutlined />),
+    ...(userLoggedIn
+      ? [getItem("Sign out", "/sign-out", <VideoCameraOutlined />)]
+      : [
+          getItem("Sign up", "/sign-up", <VideoCameraOutlined />),
+          getItem("Sign in", "/sign-in", <VideoCameraOutlined />),
+        ]),
+  ];
+};

@@ -3,6 +3,8 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, message } from "antd";
 import { useSignIn } from "../hooks/useSignIn";
+import { useDispatch } from "react-redux";
+import { setUser } from "../reducers/authentication";
 
 interface LoginProps {
   onLogin: (userName: string, password: string) => void;
@@ -15,12 +17,14 @@ interface LoginProps {
 }
 
 function Login() {
+  const dispatch = useDispatch();
   const { doSignIn, data, error, loading } = useSignIn();
   useEffect(() => {
     if (data && data.signIn) {
-      console.log(data.signIn);
       message.destroy();
       message.success("Login successful");
+      const { __typename, ...user } = data.signIn;
+      dispatch(setUser(user));
     }
   }, [data]);
 

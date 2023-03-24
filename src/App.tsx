@@ -2,21 +2,14 @@ import React, { useEffect, useState } from "react";
 import "./style/index.css";
 import Register from "./authentication/components/Register";
 import { Layout, Menu } from "antd";
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  TrademarkOutlined,
-  HomeOutlined,
-  SnippetsOutlined,
-  LogoutOutlined,
-} from "@ant-design/icons";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import * as routePaths from "./constants/routePaths";
 import { items } from "./utils/menu-items";
 import Login from "./authentication/components/Login";
+import { useTypedSelector } from "./redux/useTypedSelector";
+import { setUser } from "./authentication/reducers/authentication";
+import { useDispatch } from "react-redux";
 
 const { Header, Sider, Content } = Layout;
 
@@ -61,14 +54,19 @@ function App() {
 
 function SideMenu() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useTypedSelector((store) => store.authentication.user);
   return (
     <Menu
       theme="dark"
       mode="inline"
       defaultSelectedKeys={["1"]}
-      items={items}
+      items={items(Boolean(user))}
       onClick={({ key }) => {
-        navigate(key);
+        if (key === routePaths.SIGN_OUT) {
+          dispatch(setUser(null));
+          navigate("/");
+        } else navigate(key);
       }}
     />
   );
