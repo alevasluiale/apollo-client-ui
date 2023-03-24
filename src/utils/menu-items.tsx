@@ -1,9 +1,8 @@
 import { MenuProps } from "antd";
 import React from "react";
+import { HomeOutlined, VideoCameraOutlined } from "@ant-design/icons";
 
 type MenuItem = Required<MenuProps>["items"][number];
-
-// const get;
 
 function getItem(
   label: React.ReactNode,
@@ -21,4 +20,8 @@ function getItem(
   } as MenuItem;
 }
 
-export const items: MenuItem[] = [getItem("Option 1", "1")];
+export const items: MenuItem[] = [
+  getItem("Home", "/", <HomeOutlined />),
+  getItem("Sign up", "/sign-up", <VideoCameraOutlined />),
+  getItem("Log in", "/sign-in", <VideoCameraOutlined />),
+];

@@ -1,45 +1,50 @@
 import React, { useEffect } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
-// import FacebookLogin from 'react-facebook-login';
 import * as Yup from "yup";
 import { Input, message } from "antd";
-import { useSignUp } from "../hooks/useSignUp";
+import { useSignIn } from "../hooks/useSignIn";
 
-function Register() {
-  const { doSignUp, data, error, loading } = useSignUp();
+interface LoginProps {
+  onLogin: (userName: string, password: string) => void;
+  onFacebookAuth: (
+    username: string,
+    email: string,
+    photoUrl: string,
+    accessToken: string
+  ) => void;
+}
 
+function Login() {
+  const { doSignIn, data, error, loading } = useSignIn();
   useEffect(() => {
-    if (data && data.signUp) {
+    if (data && data.signIn) {
+      console.log(data.signIn);
       message.destroy();
-      message.success(data.signUp);
+      message.success("Login successful");
     }
   }, [data]);
 
   useEffect(() => {
-    if (error) {
+    if (Boolean(error)) {
+      console.log(error);
       message.destroy();
-      message.error("Registration failed", 2);
+      message.error("Login failed", 2);
     }
   }, [error]);
-
   return (
     <div className="col-md-4 mx-auto align-items-center">
       <Formik
         initialValues={{
           username: "",
-          email: "",
           password: "",
         }}
         validationSchema={Yup.object().shape({
           username: Yup.string().required("Required"),
           password: Yup.string().required("Required"),
-          email: Yup.string()
-            .email("Has to be a valid email.")
-            .required("Required"),
         })}
         onSubmit={(values, { resetForm }) => {
-          doSignUp(values);
-          message.loading("Registration was submitted", 2);
+          message.loading("Login in process", 2);
+          doSignIn(values);
           resetForm();
         }}
       >
@@ -60,18 +65,6 @@ function Register() {
             <div className="form-group">
               <Input
                 className="mb-2 rounded"
-                value={props.values.email}
-                placeholder="Email"
-                name="email"
-                onChange={(e: any) =>
-                  props.setFieldValue("email", e.target.value)
-                }
-              />
-              <ErrorMessage component="div" className="error" name="email" />
-            </div>
-            <div className="form-group">
-              <Input
-                className="mb-2 rounded"
                 value={props.values.password}
                 placeholder="Password"
                 name="password"
@@ -85,26 +78,33 @@ function Register() {
 
             <div className="form-group">
               <button className="btn btn-primary btn-block" type="submit">
-                <span>Register</span>
+                <span>Login</span>
               </button>
             </div>
-            {/*<div className="form-group">*/}
-            {/*  <FacebookLogin*/}
-            {/*    appId="1788569767990308"*/}
-            {/*    autoLoad={false}*/}
-            {/*    fields="name,email,picture"*/}
-            {/*    callback={(response: any) =>*/}
-            {/*      onFacebookAuth(response.name, response.email, response.picture.data.url, response.accessToken)}*/}
-            {/*    typeButton="primary"*/}
-            {/*    buttonStyle={{width: '100%'}}*/}
-            {/*    icon="fa-facebook"*/}
-            {/*  />*/}
-            {/*</div>*/}
           </Form>
         )}
       </Formik>
+
+      {/*<div className="form-group">*/}
+      {/*  <FacebookLogin*/}
+      {/*    appId="1250117045637678"*/}
+      {/*    autoLoad={false}*/}
+      {/*    fields="name,email,picture"*/}
+      {/*    callback={(response: any) =>*/}
+      {/*      onFacebookAuth(*/}
+      {/*        response.name,*/}
+      {/*        response.email,*/}
+      {/*        response.picture.data.url,*/}
+      {/*        response.accessToken*/}
+      {/*      )*/}
+      {/*    }*/}
+      {/*    typeButton="primary"*/}
+      {/*    buttonStyle={{ width: "100%" }}*/}
+      {/*    icon="fa-facebook"*/}
+      {/*  />*/}
+      {/*</div>*/}
     </div>
   );
 }
 
-export default Register;
+export default Login;

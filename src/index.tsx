@@ -1,35 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserHistory } from "history";
 import "./style/index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Route, Router, Switch } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as routePaths from "./constants/routePaths";
-import Register from "./authentication/components/Register";
 
-const history = createBrowserHistory();
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Router history={history}>
-      {/*<Switch>*/}
-      {/*  <Route*/}
-      {/*    exact*/}
-      {/*    path={routePaths.HOME}*/}
-      {/*    render={() => (*/}
-      {/*      <div>*/}
-      {/*        <a href={"/sign-up"}>sign up</a>*/}
-      {/*      </div>*/}
-      {/*    )}*/}
-      {/*  />*/}
-      {/*  <Route path={routePaths.SIGN_UP} render={() => <Register />} />*/}
-      {/*</Switch>*/}
+    <BrowserRouter>
       <App />
-    </Router>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

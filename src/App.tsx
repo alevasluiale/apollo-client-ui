@@ -13,45 +13,21 @@ import {
   SnippetsOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { Route, Switch, Link, useHistory } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import * as routePaths from "./constants/routePaths";
+import { items } from "./utils/menu-items";
+import Login from "./authentication/components/Login";
 
 const { Header, Sider, Content } = Layout;
 
 function App() {
-  const history = useHistory();
   const [collapsed, setCollapsed] = useState(false);
-
-  const goToPage = (path: String) => {
-    history.push(path);
-  };
 
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item
-            key="home"
-            // icon={<HomeOutlined />}
-            // onClick={() => goToPage(routePaths.HOME)}
-          >
-            <Link to={routePaths.HOME}>
-              <span>Home</span>
-              <HomeOutlined />
-            </Link>
-          </Menu.Item>
-          <Menu.Item
-            key="signup"
-            // icon={<VideoCameraOutlined />}
-            // onClick={() => goToPage(routePaths.SIGN_UP)}
-          >
-            <Link to={routePaths.SIGN_UP}>
-              <span>Sign Up</span>
-              <HomeOutlined />
-            </Link>
-          </Menu.Item>
-        </Menu>
+        <SideMenu />
       </Sider>
 
       <Layout className="site-layout">
@@ -72,17 +48,29 @@ function App() {
             minHeight: window.innerHeight - 100,
           }}
         >
-          <Switch>
-            <Route
-              exact
-              path={routePaths.HOME}
-              render={() => <div>HOME</div>}
-            />
-            <Route exact path={routePaths.SIGN_UP} component={Register} />
-          </Switch>
+          <Routes>
+            <Route path={routePaths.HOME} element={<div>HOME</div>} />
+            <Route path={routePaths.SIGN_UP} element={<Register />} />
+            <Route path={routePaths.SIGN_IN} element={<Login />} />
+          </Routes>
         </Content>
       </Layout>
     </Layout>
+  );
+}
+
+function SideMenu() {
+  const navigate = useNavigate();
+  return (
+    <Menu
+      theme="dark"
+      mode="inline"
+      defaultSelectedKeys={["1"]}
+      items={items}
+      onClick={({ key }) => {
+        navigate(key);
+      }}
+    />
   );
 }
 
