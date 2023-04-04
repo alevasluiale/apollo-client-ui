@@ -1,0 +1,93 @@
+import { Formik, Form, ErrorMessage } from "formik";
+import { Button, Input, Modal, TreeSelect } from "antd";
+import * as Yup from "yup";
+import { Meal } from "../../../utils/types";
+
+type RestaurantModalProps = {
+  visible: boolean;
+  closeModal: () => void;
+  meals: Array<Meal>;
+};
+
+function RestaurantModal({ visible, closeModal, meals }: RestaurantModalProps) {
+  return (
+    <Modal
+      visible={visible}
+      title="Add restaurant"
+      footer={[
+        <Button form="addRestaurantForm" key="submit" htmlType="submit">
+          Add
+        </Button>,
+        <Button onClick={closeModal}>Cancel</Button>,
+      ]}
+    >
+      <Formik
+        initialValues={{
+          id: undefined as unknown as number,
+          description: undefined as unknown as string,
+          name: undefined as unknown as string,
+          mealsIds: undefined as unknown as Array<number>,
+        }}
+        validationSchema={Yup.object().shape({
+          name: Yup.string().required("Required"),
+          description: Yup.string().required("Required"),
+          mealsIds: Yup.array().required("Required"),
+        })}
+        onSubmit={(values) => {
+          console.log(values);
+          // addRestaurant(values, values.mealsIds)
+        }}
+      >
+        {(props) => (
+          <Form id="addRestaurantForm" className="unselectable">
+            <Input
+              className="mb-2 rounded"
+              value={props.values.name}
+              placeholder="Name"
+              name="name"
+              onChange={(e) => props.setFieldValue("name", e.target.value)}
+            />
+            <ErrorMessage component="div" className="error" name="name" />
+            <Input
+              className="mb-2 rounded"
+              value={props.values.description}
+              placeholder="Description"
+              name="description"
+              onChange={(e) =>
+                props.setFieldValue("description", e.target.value)
+              }
+            />
+            <ErrorMessage
+              component="div"
+              className="error"
+              name="description"
+            />
+            <TreeSelect
+              showSearch
+              className="mb-2 rounded"
+              style={{ width: "100%" }}
+              dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
+              treeData={meals?.map((meal: Meal) => {
+                return {
+                  title: meal.name,
+                  value: meal.id,
+                  key: meal.id,
+                };
+              })}
+              placeholder="Select meals"
+              allowClear
+              treeCheckable={true}
+              showCheckedStrategy="SHOW_PARENT"
+              treeDefaultExpandAll
+              value={props.values.mealsIds}
+              onChange={(value) => props.setFieldValue("mealsIds", value)}
+            />
+            <ErrorMessage component="div" className="error" name="mealsIds" />
+          </Form>
+        )}
+      </Formik>
+    </Modal>
+  );
+}
+
+export default RestaurantModal;

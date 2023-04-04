@@ -7,8 +7,10 @@ import {
   LoginOutlined,
   LogoutOutlined,
   SnippetsOutlined,
+  MediumOutlined,
 } from "@ant-design/icons";
 import { User } from "./types";
+import * as routePaths from "../constants/routePaths";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -30,16 +32,17 @@ function getItem(
 
 export const items = function (user: User | null): MenuItem[] {
   return [
-    getItem("Home", "/", <HomeOutlined />),
+    getItem("Home", routePaths.HOME, <HomeOutlined />),
     ...(Boolean(user)
       ? [
-          getItem("Restaurants", "/restaurants", <TrademarkOutlined />),
-          getItem("Orders", "/orders", <SnippetsOutlined />),
-          getItem("Sign out", "/sign-out", <LogoutOutlined />),
+          getItem("Restaurants", routePaths.RESTAURANTS, <TrademarkOutlined />),
+          getItem("Orders", routePaths.ORDERS, <SnippetsOutlined />),
+          getItem("Meals", routePaths.MEALS, <MediumOutlined />),
+          getItem("Sign out", routePaths.SIGN_OUT, <LogoutOutlined />),
         ]
       : [
-          getItem("Sign up", "/sign-up", <UserAddOutlined />),
-          getItem("Sign in", "/sign-in", <LoginOutlined />),
+          getItem("Sign up", routePaths.SIGN_UP, <UserAddOutlined />),
+          getItem("Sign in", routePaths.SIGN_IN, <LoginOutlined />),
         ]),
   ];
 };

@@ -23,8 +23,9 @@ function Login() {
     if (data && data.signIn) {
       message.destroy();
       message.success("Login successful");
-      const { __typename, ...user } = data.signIn;
+      const { __typename, accessToken, ...user } = data.signIn;
       dispatch(setUser(user));
+      window.localStorage.setItem("token", accessToken);
     }
   }, [data]);
 

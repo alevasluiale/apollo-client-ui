@@ -10,6 +10,7 @@ import Login from "./components/authentication/components/Login";
 import { useTypedSelector } from "./redux/useTypedSelector";
 import { setUser } from "./components/authentication/reducers/authentication";
 import { useDispatch } from "react-redux";
+import RestaurantList from "./components/restaurants/components/RestaurantList";
 
 const { Header, Sider, Content } = Layout;
 
@@ -51,7 +52,15 @@ function App() {
           }}
         >
           <Routes>
-            <Route path={routePaths.HOME} element={<div>HOME</div>} />
+            <Route
+              path={routePaths.HOME}
+              element={
+                <div className="container -mt-10 mx-auto">
+                  <img alt="" src="food.jpg"></img>
+                </div>
+              }
+            />
+            <Route path={routePaths.RESTAURANTS} element={<RestaurantList />} />
             <Route path={routePaths.SIGN_UP} element={<Register />} />
             <Route path={routePaths.SIGN_IN} element={<Login />} />
           </Routes>
@@ -67,6 +76,7 @@ function SideMenu() {
   const user = useTypedSelector((store) => store.authentication.user);
   const signOut = () => {
     dispatch(setUser(null));
+    window.localStorage.removeItem("token");
     navigate("/");
     message.destroy();
     message.success("User signed out", 2);

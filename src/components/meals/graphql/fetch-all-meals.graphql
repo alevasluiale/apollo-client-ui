@@ -1,0 +1,8 @@
+query FetchAllMeals {
+    fetchAllMeals{
+        id
+        name
+        description
+        price
+    }
+}

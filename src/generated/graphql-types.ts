@@ -22,6 +22,14 @@ export type Scalars = {
   Float: number;
 };
 
+export type MealsPayload = {
+  __typename?: "MealsPayload";
+  description: Scalars["String"];
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  price: Scalars["Float"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   signIn: SignInPayload;
@@ -38,6 +46,7 @@ export type MutationSignUpArgs = {
 
 export type Query = {
   __typename?: "Query";
+  fetchAllMeals: Array<MealsPayload>;
   test: Scalars["Boolean"];
 };
 
@@ -86,6 +95,19 @@ export type SignUpMutationVariables = Exact<{
 }>;
 
 export type SignUpMutation = { __typename?: "Mutation"; signUp: string };
+
+export type FetchAllMealsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FetchAllMealsQuery = {
+  __typename?: "Query";
+  fetchAllMeals: Array<{
+    __typename?: "MealsPayload";
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+  }>;
+};
 
 export const SignInDocument = gql`
   mutation SignIn($input: SignInInput!) {
@@ -182,4 +204,64 @@ export type SignUpMutationResult = Apollo.MutationResult<SignUpMutation>;
 export type SignUpMutationOptions = Apollo.BaseMutationOptions<
   SignUpMutation,
   SignUpMutationVariables
+>;
+export const FetchAllMealsDocument = gql`
+  query FetchAllMeals {
+    fetchAllMeals {
+      id
+      name
+      description
+      price
+    }
+  }
+`;
+
+/**
+ * __useFetchAllMealsQuery__
+ *
+ * To run a query within a React component, call `useFetchAllMealsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchAllMealsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchAllMealsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchAllMealsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FetchAllMealsQuery,
+    FetchAllMealsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FetchAllMealsQuery, FetchAllMealsQueryVariables>(
+    FetchAllMealsDocument,
+    options
+  );
+}
+export function useFetchAllMealsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FetchAllMealsQuery,
+    FetchAllMealsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FetchAllMealsQuery, FetchAllMealsQueryVariables>(
+    FetchAllMealsDocument,
+    options
+  );
+}
+export type FetchAllMealsQueryHookResult = ReturnType<
+  typeof useFetchAllMealsQuery
+>;
+export type FetchAllMealsLazyQueryHookResult = ReturnType<
+  typeof useFetchAllMealsLazyQuery
+>;
+export type FetchAllMealsQueryResult = Apollo.QueryResult<
+  FetchAllMealsQuery,
+  FetchAllMealsQueryVariables
 >;
