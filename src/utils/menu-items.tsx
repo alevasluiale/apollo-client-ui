@@ -1,6 +1,14 @@
 import { MenuProps } from "antd";
 import React from "react";
-import { HomeOutlined, VideoCameraOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  UserAddOutlined,
+  TrademarkOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  SnippetsOutlined,
+} from "@ant-design/icons";
+import { User } from "./types";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -20,14 +28,18 @@ function getItem(
   } as MenuItem;
 }
 
-export const items = function (userLoggedIn: boolean): MenuItem[] {
+export const items = function (user: User | null): MenuItem[] {
   return [
     getItem("Home", "/", <HomeOutlined />),
-    ...(userLoggedIn
-      ? [getItem("Sign out", "/sign-out", <VideoCameraOutlined />)]
+    ...(Boolean(user)
+      ? [
+          getItem("Restaurants", "/restaurants", <TrademarkOutlined />),
+          getItem("Orders", "/orders", <SnippetsOutlined />),
+          getItem("Sign out", "/sign-out", <LogoutOutlined />),
+        ]
       : [
-          getItem("Sign up", "/sign-up", <VideoCameraOutlined />),
-          getItem("Sign in", "/sign-in", <VideoCameraOutlined />),
+          getItem("Sign up", "/sign-up", <UserAddOutlined />),
+          getItem("Sign in", "/sign-in", <LoginOutlined />),
         ]),
   ];
 };

@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "./style/index.css";
-import Register from "./authentication/components/Register";
-import { Layout, Menu } from "antd";
+import Register from "./components/authentication/components/Register";
+import { Layout, Menu, message } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import * as routePaths from "./constants/routePaths";
 import { items } from "./utils/menu-items";
-import Login from "./authentication/components/Login";
+import Login from "./components/authentication/components/Login";
 import { useTypedSelector } from "./redux/useTypedSelector";
-import { setUser } from "./authentication/reducers/authentication";
+import { setUser } from "./components/authentication/reducers/authentication";
 import { useDispatch } from "react-redux";
 
 const { Header, Sider, Content } = Layout;
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
+  const user = useTypedSelector((store) => store.authentication.user);
 
   return (
     <Layout>
@@ -24,7 +25,14 @@ function App() {
       </Sider>
 
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0 }}>
+        <Header
+          className="site-layout-background"
+          style={{
+            padding: 0,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           {React.createElement(
             collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
             {
@@ -32,6 +40,7 @@ function App() {
               onClick: () => setCollapsed(!collapsed),
             }
           )}
+          <div style={{ paddingRight: "1rem" }}>{user?.email}</div>
         </Header>
         <Content
           className="site-layout-background"
@@ -56,16 +65,21 @@ function SideMenu() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useTypedSelector((store) => store.authentication.user);
+  const signOut = () => {
+    dispatch(setUser(null));
+    navigate("/");
+    message.destroy();
+    message.success("User signed out", 2);
+  };
   return (
     <Menu
       theme="dark"
       mode="inline"
       defaultSelectedKeys={["1"]}
-      items={items(Boolean(user))}
+      items={items(user)}
       onClick={({ key }) => {
         if (key === routePaths.SIGN_OUT) {
-          dispatch(setUser(null));
-          navigate("/");
+          signOut();
         } else navigate(key);
       }}
     />

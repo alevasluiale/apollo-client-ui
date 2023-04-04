@@ -1,5 +1,8 @@
-import { getClient } from "../../apollo-client";
-import { SignUpInput, useSignUpMutation } from "../../generated/graphql-types";
+import { getClient } from "../../../apollo-client";
+import {
+  SignUpInput,
+  useSignUpMutation,
+} from "../../../generated/graphql-types";
 import { useCallback } from "react";
 
 const client = getClient();
