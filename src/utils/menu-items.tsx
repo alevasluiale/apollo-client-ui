@@ -30,7 +30,7 @@ function getItem(
   } as MenuItem;
 }
 
-export const items = function (user: User | null): MenuItem[] {
+export const items = function (user: User): MenuItem[] {
   return [
     getItem("Home", routePaths.HOME, <HomeOutlined />),
     ...(Boolean(user)

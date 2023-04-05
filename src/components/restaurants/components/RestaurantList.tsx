@@ -1,20 +1,11 @@
-import { useTypedSelector } from "../../../redux/useTypedSelector";
 import { Button } from "antd";
 import { useState } from "react";
 import RestaurantModal from "./RestaurantModal";
-import { useFetchAllMeals } from "../../meals/hooks/useFetchAllMeals";
+import { User } from "../../../utils/types";
 
-function RestaurantList() {
-  const user = useTypedSelector((store) => store.authentication.user);
+function RestaurantList({ user }: { user: User }) {
   const [displayModal, setDisplayModal] = useState(false);
 
-  const {
-    meals,
-    error: mealsError,
-    loading: mealsLoading,
-  } = useFetchAllMeals();
-
-  console.log(meals);
   return (
     <div>
       <Button
@@ -28,7 +19,6 @@ function RestaurantList() {
       <RestaurantModal
         visible={displayModal}
         closeModal={() => setDisplayModal(false)}
-        meals={[]}
       />
     </div>
   );

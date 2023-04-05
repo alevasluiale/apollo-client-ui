@@ -3,29 +3,18 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input, message } from "antd";
 import { useSignIn } from "../hooks/useSignIn";
-import { useDispatch } from "react-redux";
-import { setUser } from "../reducers/authentication";
-
-interface LoginProps {
-  onLogin: (userName: string, password: string) => void;
-  onFacebookAuth: (
-    username: string,
-    email: string,
-    photoUrl: string,
-    accessToken: string
-  ) => void;
-}
+import { User } from "../../../utils/types";
+import { useLocalStorage } from "usehooks-ts";
 
 function Login() {
-  const dispatch = useDispatch();
-  const { doSignIn, data, error, loading } = useSignIn();
+  const { doSignIn, data, error } = useSignIn();
+  const [, setUserData] = useLocalStorage("user", null as User);
   useEffect(() => {
     if (data && data.signIn) {
       message.destroy();
       message.success("Login successful");
-      const { __typename, accessToken, ...user } = data.signIn;
-      dispatch(setUser(user));
-      window.localStorage.setItem("token", accessToken);
+      const { __typename, ...user } = data.signIn;
+      setUserData(user);
     }
   }, [data]);
 
@@ -36,6 +25,7 @@ function Login() {
       message.error("Login failed", 2);
     }
   }, [error]);
+
   return (
     <div className="col-md-4 mx-auto align-items-center">
       <Formik

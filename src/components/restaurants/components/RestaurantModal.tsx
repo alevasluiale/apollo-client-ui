@@ -2,14 +2,22 @@ import { Formik, Form, ErrorMessage } from "formik";
 import { Button, Input, Modal, TreeSelect } from "antd";
 import * as Yup from "yup";
 import { Meal } from "../../../utils/types";
+import { useFetchAllMeals } from "../../meals/hooks/useFetchAllMeals";
 
 type RestaurantModalProps = {
   visible: boolean;
   closeModal: () => void;
-  meals: Array<Meal>;
 };
 
-function RestaurantModal({ visible, closeModal, meals }: RestaurantModalProps) {
+function RestaurantModal({ visible, closeModal }: RestaurantModalProps) {
+  const {
+    meals,
+    error: mealsError,
+    loading: mealsLoading,
+  } = useFetchAllMeals();
+
+  console.log(meals);
+
   return (
     <Modal
       visible={visible}

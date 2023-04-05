@@ -1,5 +1,6 @@
 import { getClient } from "../../../apollo-client";
 import { useFetchAllMealsQuery } from "../../../generated/graphql-types";
+import { Meal } from "../../../utils/types";
 
 const client = getClient();
 
@@ -8,5 +9,9 @@ export const useFetchAllMeals = () => {
     client,
   });
 
-  return { meals: data?.fetchAllMeals, error, loading };
+  return {
+    meals: data?.fetchAllMeals.map((meal) => meal as Meal),
+    error,
+    loading,
+  };
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./style/index.css";
 import Register from "./components/authentication/components/Register";
 import { Layout, Menu, message } from "antd";
@@ -7,16 +7,19 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import * as routePaths from "./constants/routePaths";
 import { items } from "./utils/menu-items";
 import Login from "./components/authentication/components/Login";
-import { useTypedSelector } from "./redux/useTypedSelector";
-import { setUser } from "./components/authentication/reducers/authentication";
-import { useDispatch } from "react-redux";
 import RestaurantList from "./components/restaurants/components/RestaurantList";
+import { User } from "./utils/types";
+import { useLocalStorage } from "usehooks-ts";
 
 const { Header, Sider, Content } = Layout;
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
-  const user = useTypedSelector((store) => store.authentication.user);
+  const [user] = useLocalStorage("user", null as User);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <Layout>
@@ -60,7 +63,10 @@ function App() {
                 </div>
               }
             />
-            <Route path={routePaths.RESTAURANTS} element={<RestaurantList />} />
+            <Route
+              path={routePaths.RESTAURANTS}
+              element={<RestaurantList user={user} />}
+            />
             <Route path={routePaths.SIGN_UP} element={<Register />} />
             <Route path={routePaths.SIGN_IN} element={<Login />} />
           </Routes>
@@ -71,12 +77,15 @@ function App() {
 }
 
 function SideMenu() {
+  const [user, setUserData] = useLocalStorage("user", null as User);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = useTypedSelector((store) => store.authentication.user);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   const signOut = () => {
-    dispatch(setUser(null));
-    window.localStorage.removeItem("token");
+    setUserData(null);
     navigate("/");
     message.destroy();
     message.success("User signed out", 2);
@@ -86,7 +95,7 @@ function SideMenu() {
       theme="dark"
       mode="inline"
       defaultSelectedKeys={["1"]}
-      items={items(user)}
+      items={useMemo(() => items(user), [user])}
       onClick={({ key }) => {
         if (key === routePaths.SIGN_OUT) {
           signOut();
