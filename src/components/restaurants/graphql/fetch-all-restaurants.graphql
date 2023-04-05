@@ -1,0 +1,13 @@
+query FetchAllRestaurants {
+    fetchAllRestaurants{
+        id
+        name
+        description
+        meals{
+            id
+            name
+            description
+            price
+        }
+    }
+}

@@ -7,7 +7,7 @@ import { useCallback } from "react";
 
 const client = getClient();
 
-export const useAddRestaurant = () => {
+const useAddRestaurant = () => {
   const [addRestaurantMutation, { data, error, loading }] =
     useAddRestaurantMutation({
       client,
@@ -34,3 +34,5 @@ export const useAddRestaurant = () => {
 
   return { addRestaurant, error, loading };
 };
+
+export default useAddRestaurant;

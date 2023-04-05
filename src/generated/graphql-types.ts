@@ -28,8 +28,8 @@ export type AddRestaurantInput = {
   name: Scalars["String"];
 };
 
-export type MealsPayload = {
-  __typename?: "MealsPayload";
+export type Meal = {
+  __typename?: "Meal";
   description: Scalars["String"];
   id: Scalars["ID"];
   name: Scalars["String"];
@@ -58,12 +58,21 @@ export type MutationSignUpArgs = {
 
 export type Query = {
   __typename?: "Query";
-  fetchAllMeals: Array<MealsPayload>;
+  fetchAllMeals: Array<Meal>;
+  fetchAllRestaurants: Array<Maybe<Restaurant>>;
   test: Scalars["Boolean"];
 };
 
 export type QueryTestArgs = {
   test?: InputMaybe<Scalars["String"]>;
+};
+
+export type Restaurant = {
+  __typename?: "Restaurant";
+  description: Scalars["String"];
+  id: Scalars["ID"];
+  meals: Array<Maybe<Meal>>;
+  name: Scalars["String"];
 };
 
 export type SignInInput = {
@@ -113,7 +122,7 @@ export type FetchAllMealsQueryVariables = Exact<{ [key: string]: never }>;
 export type FetchAllMealsQuery = {
   __typename?: "Query";
   fetchAllMeals: Array<{
-    __typename?: "MealsPayload";
+    __typename?: "Meal";
     id: string;
     name: string;
     description: string;
@@ -129,6 +138,25 @@ export type AddRestaurantMutationVariables = Exact<{
 export type AddRestaurantMutation = {
   __typename?: "Mutation";
   addRestaurant: string;
+};
+
+export type FetchAllRestaurantsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FetchAllRestaurantsQuery = {
+  __typename?: "Query";
+  fetchAllRestaurants: Array<{
+    __typename?: "Restaurant";
+    id: string;
+    name: string;
+    description: string;
+    meals: Array<{
+      __typename?: "Meal";
+      id: string;
+      name: string;
+      description: string;
+      price: number;
+    } | null>;
+  } | null>;
 };
 
 export const SignInDocument = gql`
@@ -335,4 +363,69 @@ export type AddRestaurantMutationResult =
 export type AddRestaurantMutationOptions = Apollo.BaseMutationOptions<
   AddRestaurantMutation,
   AddRestaurantMutationVariables
+>;
+export const FetchAllRestaurantsDocument = gql`
+  query FetchAllRestaurants {
+    fetchAllRestaurants {
+      id
+      name
+      description
+      meals {
+        id
+        name
+        description
+        price
+      }
+    }
+  }
+`;
+
+/**
+ * __useFetchAllRestaurantsQuery__
+ *
+ * To run a query within a React component, call `useFetchAllRestaurantsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchAllRestaurantsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchAllRestaurantsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchAllRestaurantsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FetchAllRestaurantsQuery,
+    FetchAllRestaurantsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    FetchAllRestaurantsQuery,
+    FetchAllRestaurantsQueryVariables
+  >(FetchAllRestaurantsDocument, options);
+}
+export function useFetchAllRestaurantsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FetchAllRestaurantsQuery,
+    FetchAllRestaurantsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FetchAllRestaurantsQuery,
+    FetchAllRestaurantsQueryVariables
+  >(FetchAllRestaurantsDocument, options);
+}
+export type FetchAllRestaurantsQueryHookResult = ReturnType<
+  typeof useFetchAllRestaurantsQuery
+>;
+export type FetchAllRestaurantsLazyQueryHookResult = ReturnType<
+  typeof useFetchAllRestaurantsLazyQuery
+>;
+export type FetchAllRestaurantsQueryResult = Apollo.QueryResult<
+  FetchAllRestaurantsQuery,
+  FetchAllRestaurantsQueryVariables
 >;

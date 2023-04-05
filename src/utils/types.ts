@@ -13,3 +13,10 @@ export interface Meal {
   id?: string;
   quantity?: number;
 }
+
+export interface Restaurant {
+  name?: string;
+  description?: string;
+  id?: string;
+  meals?: Array<Meal>;
+}

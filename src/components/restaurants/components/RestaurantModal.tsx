@@ -2,8 +2,8 @@ import { Formik, Form, ErrorMessage } from "formik";
 import { Button, Input, Modal, TreeSelect } from "antd";
 import * as Yup from "yup";
 import { Meal, User } from "../../../utils/types";
-import { useFetchAllMeals } from "../../meals/hooks/useFetchAllMeals";
-import { useAddRestaurant } from "../hooks/useAddRestaurant";
+import useFetchAllMeals from "../../meals/hooks/useFetchAllMeals";
+import useAddRestaurant from "../hooks/useAddRestaurant";
 import { useLocalStorage } from "usehooks-ts";
 
 type RestaurantModalProps = {
@@ -29,7 +29,7 @@ function RestaurantModal({ visible, closeModal }: RestaurantModalProps) {
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       title="Add restaurant"
       footer={[
         <Button form="addRestaurantForm" key="submit" htmlType="submit">

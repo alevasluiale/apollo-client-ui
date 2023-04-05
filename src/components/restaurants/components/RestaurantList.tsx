@@ -2,9 +2,11 @@ import { Button } from "antd";
 import { useState } from "react";
 import RestaurantModal from "./RestaurantModal";
 import { User } from "../../../utils/types";
+import useFetchAllRestaurants from "../hooks/useFetchAllRestaurants";
 
 function RestaurantList({ user }: { user: User }) {
   const [displayModal, setDisplayModal] = useState(false);
+  const { restaurants, error, loading } = useFetchAllRestaurants();
 
   return (
     <div>
@@ -16,10 +18,12 @@ function RestaurantList({ user }: { user: User }) {
         Add restaurant
       </Button>
 
-      <RestaurantModal
-        visible={displayModal}
-        closeModal={() => setDisplayModal(false)}
-      />
+      {displayModal && (
+        <RestaurantModal
+          visible={displayModal}
+          closeModal={() => setDisplayModal(false)}
+        />
+      )}
     </div>
   );
 }

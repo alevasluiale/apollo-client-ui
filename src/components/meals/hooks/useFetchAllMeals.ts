@@ -4,7 +4,7 @@ import { Meal } from "../../../utils/types";
 
 const client = getClient();
 
-export const useFetchAllMeals = () => {
+const useFetchAllMeals = () => {
   const { data, error, loading } = useFetchAllMealsQuery({
     client,
   });
@@ -15,3 +15,5 @@ export const useFetchAllMeals = () => {
     loading,
   };
 };
+
+export default useFetchAllMeals;
