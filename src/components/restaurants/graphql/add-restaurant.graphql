@@ -1,0 +1,3 @@
+mutation AddRestaurant($input: AddRestaurantInput!,$userId: ID!) {
+    addRestaurant(input: $input,userId: $userId)
+}

@@ -1,8 +1,10 @@
 import { Formik, Form, ErrorMessage } from "formik";
 import { Button, Input, Modal, TreeSelect } from "antd";
 import * as Yup from "yup";
-import { Meal } from "../../../utils/types";
+import { Meal, User } from "../../../utils/types";
 import { useFetchAllMeals } from "../../meals/hooks/useFetchAllMeals";
+import { useAddRestaurant } from "../hooks/useAddRestaurant";
+import { useLocalStorage } from "usehooks-ts";
 
 type RestaurantModalProps = {
   visible: boolean;
@@ -10,6 +12,13 @@ type RestaurantModalProps = {
 };
 
 function RestaurantModal({ visible, closeModal }: RestaurantModalProps) {
+  const [user] = useLocalStorage("user", null as User);
+  const {
+    addRestaurant,
+    error: addRestaurantError,
+    loading: addRestaurantLoading,
+  } = useAddRestaurant();
+
   const {
     meals,
     error: mealsError,
@@ -31,10 +40,9 @@ function RestaurantModal({ visible, closeModal }: RestaurantModalProps) {
     >
       <Formik
         initialValues={{
-          id: undefined as unknown as number,
           description: undefined as unknown as string,
           name: undefined as unknown as string,
-          mealsIds: undefined as unknown as Array<number>,
+          mealsIds: undefined as unknown as Array<string>,
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().required("Required"),
@@ -43,7 +51,7 @@ function RestaurantModal({ visible, closeModal }: RestaurantModalProps) {
         })}
         onSubmit={(values) => {
           console.log(values);
-          // addRestaurant(values, values.mealsIds)
+          addRestaurant(values, user?.id || "");
         }}
       >
         {(props) => (

@@ -22,6 +22,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddRestaurantInput = {
+  description: Scalars["String"];
+  mealsIds: Array<InputMaybe<Scalars["ID"]>>;
+  name: Scalars["String"];
+};
+
 export type MealsPayload = {
   __typename?: "MealsPayload";
   description: Scalars["String"];
@@ -32,8 +38,14 @@ export type MealsPayload = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  addRestaurant: Scalars["String"];
   signIn: SignInPayload;
   signUp: Scalars["String"];
+};
+
+export type MutationAddRestaurantArgs = {
+  input?: InputMaybe<AddRestaurantInput>;
+  userId: Scalars["ID"];
 };
 
 export type MutationSignInArgs = {
@@ -107,6 +119,16 @@ export type FetchAllMealsQuery = {
     description: string;
     price: number;
   }>;
+};
+
+export type AddRestaurantMutationVariables = Exact<{
+  input: AddRestaurantInput;
+  userId: Scalars["ID"];
+}>;
+
+export type AddRestaurantMutation = {
+  __typename?: "Mutation";
+  addRestaurant: string;
 };
 
 export const SignInDocument = gql`
@@ -264,4 +286,53 @@ export type FetchAllMealsLazyQueryHookResult = ReturnType<
 export type FetchAllMealsQueryResult = Apollo.QueryResult<
   FetchAllMealsQuery,
   FetchAllMealsQueryVariables
+>;
+export const AddRestaurantDocument = gql`
+  mutation AddRestaurant($input: AddRestaurantInput!, $userId: ID!) {
+    addRestaurant(input: $input, userId: $userId)
+  }
+`;
+export type AddRestaurantMutationFn = Apollo.MutationFunction<
+  AddRestaurantMutation,
+  AddRestaurantMutationVariables
+>;
+
+/**
+ * __useAddRestaurantMutation__
+ *
+ * To run a mutation, you first call `useAddRestaurantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddRestaurantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addRestaurantMutation, { data, loading, error }] = useAddRestaurantMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useAddRestaurantMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddRestaurantMutation,
+    AddRestaurantMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddRestaurantMutation,
+    AddRestaurantMutationVariables
+  >(AddRestaurantDocument, options);
+}
+export type AddRestaurantMutationHookResult = ReturnType<
+  typeof useAddRestaurantMutation
+>;
+export type AddRestaurantMutationResult =
+  Apollo.MutationResult<AddRestaurantMutation>;
+export type AddRestaurantMutationOptions = Apollo.BaseMutationOptions<
+  AddRestaurantMutation,
+  AddRestaurantMutationVariables
 >;
