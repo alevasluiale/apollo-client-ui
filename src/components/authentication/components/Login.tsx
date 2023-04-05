@@ -5,8 +5,10 @@ import { Input, message } from "antd";
 import { useSignIn } from "../hooks/useSignIn";
 import { User } from "../../../utils/types";
 import { useLocalStorage } from "usehooks-ts";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const { doSignIn, data, error } = useSignIn();
   const [, setUserData] = useLocalStorage("user", null as User);
   useEffect(() => {
@@ -15,6 +17,7 @@ function Login() {
       message.success("Login successful");
       const { __typename, ...user } = data.signIn;
       setUserData(user);
+      navigate("/");
     }
   }, [data]);
 

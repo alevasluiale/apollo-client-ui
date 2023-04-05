@@ -3,7 +3,7 @@ import "./style/index.css";
 import Register from "./components/authentication/components/Register";
 import { Layout, Menu, message } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import * as routePaths from "./constants/routePaths";
 import { items } from "./utils/menu-items";
 import Login from "./components/authentication/components/Login";
@@ -68,7 +68,12 @@ function App() {
               element={<RestaurantList user={user} />}
             />
             <Route path={routePaths.SIGN_UP} element={<Register />} />
-            <Route path={routePaths.SIGN_IN} element={<Login />} />
+            <Route
+              path={routePaths.SIGN_IN}
+              element={
+                Boolean(user) ? <Navigate to={"/"} replace /> : <Login />
+              }
+            />
           </Routes>
         </Content>
       </Layout>
