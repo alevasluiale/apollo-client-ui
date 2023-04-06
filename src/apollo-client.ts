@@ -1,13 +1,16 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { useTypedSelector } from "./redux/useTypedSelector";
+import { useLocalStorage } from "usehooks-ts";
+import { User } from "./utils/types";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:4000",
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = window.localStorage.getItem("token");
+  const user = JSON.parse(window.localStorage.getItem("user") || "") as User;
+  const token = user?.accessToken;
   return {
     headers: {
       ...headers,

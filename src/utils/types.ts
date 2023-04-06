@@ -2,6 +2,7 @@ interface UserInterface {
   email: string;
   id: string;
   username: string;
+  accessToken: string;
 }
 
 export type User = UserInterface | null;

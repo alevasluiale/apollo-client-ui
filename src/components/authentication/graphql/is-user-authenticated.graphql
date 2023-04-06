@@ -1,0 +1,3 @@
+query IsUserAuthenticated($userName: String!) {
+    isUserAuthenticated(userName: $userName)
+}

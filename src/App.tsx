@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./style/index.css";
 import Register from "./components/authentication/components/Register";
-import { Layout, Menu, message } from "antd";
+import { Layout, Menu, message, Space, Spin } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import * as routePaths from "./constants/routePaths";
@@ -10,16 +10,19 @@ import Login from "./components/authentication/components/Login";
 import RestaurantList from "./components/restaurants/components/RestaurantList";
 import { User } from "./utils/types";
 import { useLocalStorage } from "usehooks-ts";
+import useIsUserAuthenticated from "./components/authentication/hooks/useIsUserAuthenticated";
+import Spinner from "./components/common/Spinner";
 
 const { Header, Sider, Content } = Layout;
 
 function App() {
+  const authenticatingUser = useIsUserAuthenticated();
   const [collapsed, setCollapsed] = useState(false);
   const [user] = useLocalStorage("user", null as User);
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  if (authenticatingUser) {
+    return <Spinner />;
+  }
 
   return (
     <Layout>
@@ -84,10 +87,6 @@ function App() {
 function SideMenu() {
   const [user, setUserData] = useLocalStorage("user", null as User);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   const signOut = () => {
     setUserData(null);
